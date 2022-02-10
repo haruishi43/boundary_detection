@@ -2,6 +2,7 @@
 
 import numpy as np
 from skimage import io
+from PIL import Image
 
 
 def apply_mask(image, mask, color):
@@ -80,4 +81,8 @@ def visualize_prediction(dataset, path, pred):
     masked_image[idx] = masked_image[idx] / edge_sum[idx]
     masked_image[~idx] = 255
 
-    io.imsave(path, masked_image / 255)
+    # io.imsave(path, masked_image / 255)
+
+    masked_image = masked_image.astype(np.uint8)
+    img = Image.fromarray(masked_image)
+    img.save(path)

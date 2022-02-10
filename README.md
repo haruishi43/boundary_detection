@@ -19,7 +19,14 @@ CUDA_VISIBLE_DEVICES=0,1 python boundary/train.py --checkname dff_test --base-si
 ## Test
 
 ```Bash
+CUDA_VISIBLE_DEVICES=0,1 python boundary/test.py --dataset cityscapes --model dff --checkname trained_dff --resume-dir results/model_best.pth.tar --workers 4 --backbone resnet50 --eval
 ```
+
+For visualization:
+```Bash
+
+```
+
 
 ## Evaluate
 

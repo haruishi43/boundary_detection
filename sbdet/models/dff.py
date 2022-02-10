@@ -138,7 +138,7 @@ def get_dff(
         "sbd": "sbd",
     }
     # infer number of classes
-    from datasets import datasets
+    from sbdet.datasets import datasets
 
     model = DFF(
         datasets[dataset.lower()].NUM_CLASS, backbone=backbone, root=root, **kwargs

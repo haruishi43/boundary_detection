@@ -132,11 +132,12 @@ def _get_cityscapes_pairs(folder="data/cityscapes", split="train"):
         split_f = os.path.join(folder, "edge_splits", "val.json")
         img_paths, mask_paths = get_path_pairs_json(folder, split_f)
     elif split == "test":
+        print("This is a bad idea...")
         split_f = os.path.join(folder, "edge_splits", "test.json")
         img_paths, mask_paths = get_path_pairs_json(folder, split_f)
     else:
         # FIXME: how do we make vis.txt
-        split_f = os.path.join(folder, "edge_splits", "vis.json")
+        split_f = os.path.join(folder, "edge_splits", "val.json")  # vis.json
         img_paths, mask_paths = get_path_pairs_json(folder, split_f)
 
     return img_paths, mask_paths

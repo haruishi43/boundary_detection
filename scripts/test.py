@@ -11,10 +11,11 @@ from torchvision import transforms
 from encoding.nn import BatchNorm2d
 from encoding.parallel import DataParallelModel
 
-from boundary.datasets import get_edge_dataset, test_batchify_fn
-from boundary.models import get_edge_model
-from boundary.visualize import visualize_prediction
-from boundary.option import Options
+from sbdet.datasets import get_edge_dataset, test_batchify_fn
+from sbdet.models import get_edge_model
+from sbdet.visualize import visualize_prediction
+
+from scripts.option import Options
 
 
 def test(args):

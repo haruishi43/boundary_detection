@@ -7,14 +7,16 @@ from torch.utils import data
 import torchvision.transforms as transform
 from tqdm import tqdm
 
+# FIXME: remove this part
 from encoding.nn import SyncBatchNorm
 from encoding import utils
 
-from boundary.losses import EdgeDetectionReweightedLosses
-from boundary.datasets import get_edge_dataset
-from boundary.models import get_edge_model
-from boundary.option import Options
-from boundary.utils import create_logger
+from sbdet.losses import EdgeDetectionReweightedLosses
+from sbdet.datasets import get_edge_dataset
+from sbdet.models import get_edge_model
+from sbdet.utils import create_logger
+
+from scripts.option import Options
 
 
 class Trainer:

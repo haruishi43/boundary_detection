@@ -9,12 +9,14 @@ import torch.nn.functional as F
 from torch.nn.parallel.data_parallel import DataParallel
 from torch.nn.parallel.scatter_gather import scatter
 
+# FIXME: remove this
+from encoding.utils import batch_pix_accuracy, batch_intersection_union
+
 from .dilated_resnet import (
     resnet50,
     resnet101,
     resnet152,
 )
-from encoding.utils import batch_pix_accuracy, batch_intersection_union
 
 up_kwargs = {"mode": "bilinear", "align_corners": True}
 

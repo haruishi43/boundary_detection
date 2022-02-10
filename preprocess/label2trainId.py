@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
     import os
     from PIL import Image
-    from sseg.datasets.cityscapes_labels import (
+    from sbdet.datasets.cityscapes_labels import (
         labels,
         trainId2label,
         id2label,
