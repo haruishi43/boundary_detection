@@ -133,25 +133,10 @@ def get_dff(
     **kwargs
 ):
     """DFF model from the paper "Dynamic Feature Fusion for Semantic Edge Detection" """
-    acronyms = {
-        "cityscapes": "cityscapes",
-        "sbd": "sbd",
-    }
     # infer number of classes
-    from sbdet_old.datasets import datasets
+    from sbdet.datasets import datasets
 
     model = DFF(
         datasets[dataset.lower()].NUM_CLASS, backbone=backbone, root=root, **kwargs
     )
-    if pretrained:
-        from encoding.models.model_store import get_model_file
-
-        # FIXME: not available (maybe it's their pretrained weights)
-        # the paper saids the ResNet were pretrianed on ImageNet
-        model.load_state_dict(
-            torch.load(
-                get_model_file("fcn_%s_%s" % (backbone, acronyms[dataset]), root=root)
-            ),
-            strict=False,
-        )
     return model

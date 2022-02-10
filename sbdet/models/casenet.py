@@ -56,23 +56,10 @@ def get_casenet(
     **kwargs
 ):
     """CaseNet model from the paper "CASENet: Deep Category-Aware Semantic Edge Detection" """
-    acronyms = {
-        "cityscapes": "cityscapes",
-        "sbd": "sbd",
-    }
     # infer number of classes
     from datasets import datasets
 
     model = CaseNet(
         datasets[dataset.lower()].NUM_CLASS, backbone=backbone, root=root, **kwargs
     )
-    if pretrained:
-        from encoding.models.model_store import get_model_file
-
-        model.load_state_dict(
-            torch.load(
-                get_model_file("fcn_%s_%s" % (backbone, acronyms[dataset]), root=root)
-            ),
-            strict=False,
-        )
     return model
