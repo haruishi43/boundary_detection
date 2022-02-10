@@ -8,8 +8,6 @@ from torch.utils import data
 from torch.nn.parallel import DataParallel
 from torchvision import transforms
 
-from encoding.nn import BatchNorm2d
-
 from sbdet.datasets import get_edge_dataset, test_batchify_fn
 from sbdet.models import get_edge_model
 from sbdet.visualize import visualize_prediction
@@ -100,7 +98,7 @@ def test(args):
         args.model,
         dataset=args.dataset,
         backbone=args.backbone,
-        norm_layer=BatchNorm2d,
+        norm_layer=torch.nn.BatchNorm2d,
         crop_size=args.crop_size,
     )
 
