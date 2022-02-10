@@ -192,8 +192,8 @@ class ResNet(nn.Module):
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
-        # FIXME: dilation is wrong: should be 1, 1, 2, 4
-        # FIXME: strides are wrong: should be 1, 2, 1, 1
+        # NOTE: dilation: from 1, 1, 2, 4 -> 2, 2, 2, 4
+        # NOTE: strides: from 1, 2, 1, 1 -> 1, 2, 2, 1
         self.layer1 = self._make_layer(
             block, 64, layers[0], stride=1, dilation=2, norm_layer=norm_layer
         )

@@ -45,7 +45,7 @@ class DFF(BaseNet):
         self.side2 = nn.Sequential(
             nn.Conv2d(256, 1, 1, bias=True),
             norm_layer(1),
-            nn.ConvTranspose2d(1, 1, 4, stride=2, padding=1, bias=False),
+            nn.ConvTranspose2d(1, 1, 4, stride=2, padding=1, bias=False),  # FIXME: upsample
         )
         self.side3 = nn.Sequential(
             nn.Conv2d(512, 1, 1, bias=True),
@@ -78,6 +78,7 @@ class DFF(BaseNet):
         ada_weights = self.ada_learner(side5_w)  # (N, 19, 4, H, W)
 
         slice5 = side5[:, 0:1, :, :]  # (N, 1, H, W)
+
         fuse = torch.cat((slice5, side1, side2, side3), 1)
         for i in range(side5.size(1) - 1):
             slice5 = side5[:, i + 1 : i + 2, :, :]  # (N, 1, H, W)

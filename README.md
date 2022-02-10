@@ -13,18 +13,18 @@ python preprocess/preproc_original.py
 ## Training
 
 ```Bash
-CUDA_VISIBLE_DEVICES=0,1 python boundary/train.py --checkname dff_test --base-size 640 --crop-size 640 --worker 4 --batch-size 2
+CUDA_VISIBLE_DEVICES=0,1 python scripts/train.py --checkname dff_test --base-size 640 --crop-size 640 --worker 4 --batch-size 2
 ```
 
 ## Test
 
 ```Bash
-CUDA_VISIBLE_DEVICES=0,1 python boundary/test.py --dataset cityscapes --model dff --checkname trained_dff --resume-dir results/model_best.pth.tar --workers 4 --backbone resnet50 --eval
+CUDA_VISIBLE_DEVICES=0,1 python scripts/test.py --dataset cityscapes --model dff --checkname trained_dff --resume-dir results/model_best.pth.tar --workers 4 --backbone resnet50 --eval
 ```
 
 For visualization:
 ```Bash
-
+CUDA_VISIBLE_DEVICES=0,1 python scripts/test.py --dataset cityscapes --model dff --checkname trained_dff --resume-dir results/model_best.pth.tar --workers 4 --backbone resnet50 --eval
 ```
 
 

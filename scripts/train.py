@@ -19,6 +19,8 @@ from sbdet.utils import create_logger
 
 from scripts.option import Options
 
+torch.autograd.set_detect_anomaly(True)
+
 
 class Trainer:
     def __init__(self, args):
@@ -107,7 +109,7 @@ class Trainer:
                 {"params": model.fuse.parameters(), "lr": args.lr * 10},
             ]
 
-        optimizer = optim.SGD(
+        self.optimizer = optim.SGD(
             params_list,
             lr=args.lr,
             weight_decay=args.weight_decay,
@@ -115,13 +117,11 @@ class Trainer:
         )
         self.criterion = EdgeDetectionReweightedLosses()
 
-        model, self.optimizer = model, optimizer
-
         # using cuda
         # if args.cuda:
         #     self.model = DataParallelModel(self.model).cuda()
         #     self.criterion = DataParallelCriterion(self.criterion).cuda()
-        self.model = torch.nn.DataParallel(model.cuda())
+        self.model = torch.nn.DataParallel(model).cuda()
 
         # finetune from a trained model
         if args.ft:
@@ -181,7 +181,7 @@ class Trainer:
         train_loss_all = 0.0
 
         for i, (image, target) in enumerate(tbar):
-            self.scheduler(self.optimizer, i, epoch, 0.0)
+
             self.optimizer.zero_grad()
 
             image = image.float().cuda()
@@ -231,6 +231,8 @@ class Trainer:
                     },
                     os.path.join(save_dir, filename),
                 )
+
+        self.scheduler.step()
 
     def validation(self, epoch):
         self.model.eval()
