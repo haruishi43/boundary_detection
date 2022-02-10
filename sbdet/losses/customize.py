@@ -22,6 +22,8 @@ class WeightedCrossEntropyWithLogits(_Loss):
 
     def forward(self, inputs, targets):
         loss_total = 0
+
+        # FIXME: could optimize for batched loss
         for i in range(targets.size(0)):  # iterate for batch size
             pred = inputs[i]
             target = targets[i]

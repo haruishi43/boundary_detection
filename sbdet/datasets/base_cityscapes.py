@@ -95,9 +95,9 @@ class BaseDataset(data.Dataset):
         img = img.resize((ow, oh), Image.BILINEAR)
         img = np.array(img).astype(np.float)
         mask = mask.resize((ow, oh), Image.NEAREST)
-        pad_index = np.ones(
-            [oh, ow]
-        )  # pad mask used to record the padding area. Ignore the losses of padding area when compute loss.
+
+        # pad mask used to record the padding area. Ignore the losses of padding area when compute loss.
+        pad_index = np.ones([oh, ow])
 
         # pad crop
         if short_size < crop_size:
