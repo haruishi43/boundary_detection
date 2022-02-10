@@ -2,7 +2,6 @@
 
 import os
 from tqdm import tqdm
-from skimage import io
 
 import torch
 from torch.utils import data
