@@ -84,6 +84,9 @@ class Options:
             help="learning rate scheduler (default: poly)",
         )
         parser.add_argument(
+            "--poly_exp", type=float, default=1.0, help="polynomial LR exponent"
+        )
+        parser.add_argument(
             "--lr-step", type=int, default=None, help="lr step to change lr"
         )
         parser.add_argument(

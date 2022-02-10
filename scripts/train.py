@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 
+import math
 import os
 
 import torch
+from torch import optim
 from torch.utils import data
 import torchvision.transforms as transform
 from tqdm import tqdm
 
 # FIXME: remove this part
 from encoding.nn import SyncBatchNorm
-from encoding import utils
 
 from sbdet.losses import EdgeDetectionReweightedLosses
 from sbdet.datasets import get_edge_dataset
@@ -106,11 +107,11 @@ class Trainer:
                 {"params": model.fuse.parameters(), "lr": args.lr * 10},
             ]
 
-        optimizer = torch.optim.SGD(
+        optimizer = optim.SGD(
             params_list,
             lr=args.lr,
-            momentum=args.momentum,
             weight_decay=args.weight_decay,
+            momentum=args.momentum,
         )
         self.criterion = EdgeDetectionReweightedLosses()
 
@@ -157,14 +158,19 @@ class Trainer:
             )
 
         # lr scheduler
-        self.scheduler = utils.LR_Scheduler(
-            args.lr_scheduler,
-            args.lr,
-            args.epochs,
-            len(self.trainloader),
-            # logger=self.logger,
-            lr_step=args.lr_step,
-            quiet=True,
+        # self.scheduler = utils.LR_Scheduler(
+        #     args.lr_scheduler,
+        #     args.lr,
+        #     args.epochs,
+        #     len(self.trainloader),
+        #     # logger=self.logger,
+        #     lr_step=args.lr_step,
+        #     quiet=True,
+        # )
+        lambda1 = lambda epoch: math.pow(1 - epoch / args.epochs, args.poly_exp)
+        self.scheduler = optim.lr_scheduler.LambdaLR(
+            self.optimizer,
+            lr_lambda=lambda1,
         )
 
     def training(self, epoch):
@@ -208,14 +214,22 @@ class Trainer:
             # save checkpoint every 20 epoch
             filename = "checkpoint_%s.pth.tar" % (epoch + 1)
             if epoch % 19 == 0 or epoch == args.epochs - 1:
-                utils.save_checkpoint(  # default save path is `runs`
+                save_dir = os.path.join(
+                    'runs',
+                    args.dataset,
+                    args.model,
+                    args.backbone,
+                    args.checkname,
+                )
+                if not os.path.exists(save_dir):
+                    os.makedirs(save_dir)
+                torch.save(
                     {
                         "epoch": epoch + 1,
                         "state_dict": self.model.module.state_dict(),
                         "optimizer": self.optimizer.state_dict(),
                     },
-                    self.args,
-                    filename,
+                    os.path.join(save_dir, filename),
                 )
 
     def validation(self, epoch):

@@ -5,10 +5,10 @@ from tqdm import tqdm
 
 import torch
 from torch.utils import data
+from torch.nn.parallel import DataParallel
 from torchvision import transforms
 
 from encoding.nn import BatchNorm2d
-from encoding.parallel import DataParallelModel
 
 from sbdet.datasets import get_edge_dataset, test_batchify_fn
 from sbdet.models import get_edge_model
@@ -112,7 +112,7 @@ def test(args):
     model.load_state_dict(checkpoint["state_dict"], strict=False)
 
     if args.cuda:
-        model = DataParallelModel(model).cuda()
+        model = DataParallel(model.cuda())
     print(model)
 
     model.eval()
