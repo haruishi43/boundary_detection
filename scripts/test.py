@@ -186,8 +186,6 @@ def test(args):
                 fuse_list = []
                 for i, (fuse, side5) in enumerate(zip(b_fuse, b_side5)):  # iterate for n (gpu counts)
                     im_size = tuple(im_sizes[i].numpy())
-                    print(i, 'im_size', im_size)
-                    print(i, 'output', fuse.shape)
 
                     side5 = side5.squeeze_()
                     side5 = side5.sigmoid_().cpu().numpy()
