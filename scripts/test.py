@@ -111,7 +111,7 @@ def test(args):
 
     if args.cuda:
         model = DataParallel(model.cuda())
-    print(model)
+    # print(model)
 
     model.eval()
     tbar = tqdm(test_data)
@@ -122,25 +122,28 @@ def test(args):
                 images = [image.unsqueeze(0) for image in images]
                 images = torch.cat(images, 0)
                 outputs = model(images.float())
+                b_side5 = outputs[0]
+                b_fuse = outputs[1]
 
-                num_gpus = len(os.environ["CUDA_VISIBLE_DEVICES"].split(","))
-                if num_gpus == 1:
-                    outputs = [outputs]
+                # num_gpus = len(os.environ["CUDA_VISIBLE_DEVICES"].split(","))
+                # if num_gpus == 1:
+                #     outputs = [outputs]
 
                 # extract the side5 output and fuse output from outputs
                 side5_list = []
                 fuse_list = []
-                for i in range(len(outputs)):  # iterate for n (gpu counts)
+                # for i in range(len(outputs)):  # iterate for n (gpu counts)
+                for i, (fuse, side5) in enumerate(zip(b_fuse, b_side5)):
                     im_size = tuple(im_sizes[i].numpy())
-                    output = outputs[i]
+                    # output = outputs[i]
 
-                    side5 = output[0].squeeze_()
+                    side5 = side5.squeeze_()
                     # side5 = side5.sigmoid_().cpu().numpy()
                     # side5 = side5[:, 0 : im_size[1], 0 : im_size[0]]
                     side5 = side5.sigmoid_().cpu()
                     side5 = side5[:, 0 : im_size[1], 0 : im_size[0]]
 
-                    fuse = output[1].squeeze_()
+                    fuse = fuse.squeeze_()
                     # fuse = fuse.sigmoid_().cpu().numpy()
                     # fuse = fuse[:, 0 : im_size[1], 0 : im_size[0]]
                     fuse = fuse.sigmoid_().cpu()
@@ -170,24 +173,27 @@ def test(args):
             with torch.no_grad():
                 images = [image.unsqueeze(0) for image in images]
                 images = torch.cat(images, 0)
-                outputs = model(images.float())
+                outputs = model(images.float())  # (tensor(b, c, h, w), tensor(b, c, h, w))
+                b_side5 = outputs[0]
+                b_fuse = outputs[1]
 
-                num_gpus = len(os.environ["CUDA_VISIBLE_DEVICES"].split(","))
-                if num_gpus == 1:
-                    outputs = [outputs]
+                # num_gpus = len(os.environ["CUDA_VISIBLE_DEVICES"].split(","))
+                # if num_gpus == 1:
+                #     outputs = [outputs]
 
                 # extract the side5 output and fuse output from outputs
                 side5_list = []
                 fuse_list = []
-                for i in range(len(outputs)):  # iterate for n (gpu counts)
+                for i, (fuse, side5) in enumerate(zip(b_fuse, b_side5)):  # iterate for n (gpu counts)
                     im_size = tuple(im_sizes[i].numpy())
-                    output = outputs[i]
+                    print(i, 'im_size', im_size)
+                    print(i, 'output', fuse.shape)
 
-                    side5 = output[0].squeeze_()
+                    side5 = side5.squeeze_()
                     side5 = side5.sigmoid_().cpu().numpy()
                     side5 = side5[:, 0 : im_size[1], 0 : im_size[0]]
 
-                    fuse = output[1].squeeze_()
+                    fuse = fuse.squeeze_()
                     fuse = fuse.sigmoid_().cpu().numpy()
                     fuse = fuse[:, 0 : im_size[1], 0 : im_size[0]]
 
