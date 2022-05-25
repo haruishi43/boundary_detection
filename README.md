@@ -24,7 +24,7 @@ CUDA_VISIBLE_DEVICES=0,1 python scripts/test.py --dataset cityscapes --model dff
 
 For visualization:
 ```Bash
-CUDA_VISIBLE_DEVICES=0,1 python scripts/test.py --dataset cityscapes --model dff --checkname trained_dff --resume-dir results/model_best.pth.tar --workers 4 --backbone resnet50 --eval
+CUDA_VISIBLE_DEVICES=0,1 python scripts/test.py --dataset cityscapes --model dff --checkname trained_dff --resume-dir results/model_best.pth.tar --workers 4 --backbone resnet50
 ```
 
 
